@@ -19,48 +19,39 @@ Before running:  pip install -r requirements.txt
 
 import sys
 
-if len(sys.argv) > 1:
-    try:
-        seed = int(sys.argv[1])
-    except ValueError:
-        print("Seed must be an integer.")
-        sys.exit(1)
-else:
-    seed = None
-
 from sales_pipeline import (
-    get_raw_sales_data,
     clean_sales_data,
-    summarize_by_item,
     find_top_entry,
-
+    get_raw_sales_data,
+    print_item_table,
+    summarize_by_item,
 )
 
+# --- Reading the dataset seed ----------------------------------------------------
+# A missing or blank argument means "use the sample data".
+
+seed = None
+if len(sys.argv) > 1 and sys.argv[1].strip() != "":
+    seed = int(sys.argv[1])
+
+
 # --- The report ------------------------------------------------------------------
-#
-# 
+
 print("=== MARKETING: Revenue by Item ===")
-print()  # blank line
+print()
 
-# --- Step 1: Extract ---------------------------------------------
-
+# Extract
 raw_data = get_raw_sales_data(seed)
+
+# Transform
 clean_data = clean_sales_data(raw_data)
 item_summary = summarize_by_item(clean_data)
-top_by_revenue = find_top_entry(item_summary, field="revenue")
-top_by_units = find_top_entry(item_summary, field="units_sold")
+top_by_revenue = find_top_entry(item_summary, "revenue")
+top_by_units = find_top_entry(item_summary, "units_sold")
 
-# --- Step 3: Load -----------------------------------------------
-
-# Print the item table, one line per item, with totals formatted with commas and 2 decimals
-
-print(f"{'Item':<20} {'Units Sold':>12} {'Revenue':>12}")
-for entry in item_summary:
-    print(f"{entry['item']:<20} {entry['units_sold']:>12} ${entry['revenue']:>11,.2f}")
-
-print()  # blank line
-
-# Print the top sellers exactly with spacing aligned
+# Load
+print_item_table(item_summary)
+print()
 
 print(f"Top seller by revenue: {top_by_revenue['item']} (${top_by_revenue['revenue']:,.2f})")
 print(f"Top seller by units:   {top_by_units['item']} ({top_by_units['units_sold']} units)")

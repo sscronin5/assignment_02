@@ -22,41 +22,47 @@ Before running:  pip install -r requirements.txt
     python code/main_daily_report.py 42     # the generated data for seed 42
 """
 
-from sales_pipeline import summarize_by_day, find_top_entry, calculate_total_revenue
-
 import sys
-from sales_pipeline import get_raw_sales_data, clean_sales_data, summarize_by_day, find_top_entry, calculate_total_revenue
 
-# Handle the seed argument exactly like other reports:
-if len(sys.argv) > 1:
-    try:
-        seed = int(sys.argv[1])
-    except ValueError:
-        print("Seed must be an integer.")
-        sys.exit(1)
-else:
-    seed = None
+from sales_pipeline import (
+    calculate_total_revenue,
+    clean_sales_data,
+    find_top_entry,
+    get_raw_sales_data,
+    print_day_table,
+    summarize_by_day,
+)
 
-print("=== OPERATIONS: Revenue by Day ===\n")
+# --- Reading the dataset seed ----------------------------------------------------
+# A missing or blank argument means "use the sample data".
 
-# Step 1: Extract
+seed = None
+if len(sys.argv) > 1 and sys.argv[1].strip() != "":
+    seed = int(sys.argv[1])
+
+
+# --- The report ------------------------------------------------------------------
+
+print("=== OPERATIONS: Sales by Day ===")
+print()
+
+# Extract
 raw_data = get_raw_sales_data(seed)
 
-# Step 2: Transform
+# Transform
 clean_data = clean_sales_data(raw_data)
 day_summary = summarize_by_day(clean_data)
+total_revenue = calculate_total_revenue(clean_data)
+busiest_by_revenue = find_top_entry(day_summary, "revenue")
+busiest_by_units = find_top_entry(day_summary, "units_sold")
 
-# Find top day by revenue, using existing function
-top_day = find_top_entry(day_summary, field="revenue")
-
-# Step 3: Load - print the summary
-print(f"{'Day':<10} {'Units Sold':>12} {'Revenue':>12}")
-for entry in day_summary:
-    print(f"{entry['day']:<10} {entry['units_sold']:>12} ${entry['revenue']:>11,.2f}")
-
+# Load
+print_day_table(day_summary)
 print()
-print(f"Top day by revenue: {top_day['day']} (${top_day['revenue']:,.2f})")
 
+print(f"Total Revenue:          ${total_revenue:,.2f}")
+print(f"Busiest day by revenue: {busiest_by_revenue['date']} (${busiest_by_revenue['revenue']:,.2f})")
+print(f"Busiest day by units:   {busiest_by_units['date']} ({busiest_by_units['units_sold']} units)")
 
 # --- The report ------------------------------------------------------------------
 #
