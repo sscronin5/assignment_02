@@ -19,6 +19,13 @@ Before running:  pip install -r requirements.txt
 
 import sys
 
+from sales_pipeline import (
+    get_raw_sales_data, 
+    clean_sales_data,
+    calculate_total_revenue,
+    print_sales_table,
+)
+
 # --- Reading the dataset seed ----------------------------------------------------
 #
 # This block is GIVEN to you, in this report only. It is plumbing, not the lesson —
