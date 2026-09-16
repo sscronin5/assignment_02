@@ -19,39 +19,48 @@ Before running:  pip install -r requirements.txt
 
 import sys
 
+if len(sys.argv) > 1:
+    try:
+        seed = int(sys.argv[1])
+    except ValueError:
+        print("Seed must be an integer.")
+        sys.exit(1)
+else:
+    seed = None
+
+from sales_pipeline import (
+    get_raw_sales_data,
+    clean_sales_data,
+    summarize_by_item,
+    find_top_entry,
+
+)
+
 # --- The report ------------------------------------------------------------------
 #
-# Less scaffolding this time. The steps are described, but which function does each
-# job — and what to call the result — is now yours to work out. Everything you need
-# is in the package's public API; if a step sounds like arithmetic, the function
-# already exists in transform.py.
-#
-# `main_finance_report.py` is your worked example for anything structural.
+# 
+print("=== MARKETING: Revenue by Item ===")
+print()  # blank line
 
-# TODO: import what this report needs from the package.
+# --- Step 1: Extract ---------------------------------------------
 
+raw_data = get_raw_sales_data(seed)
+clean_data = clean_sales_data(raw_data)
+item_summary = summarize_by_item(clean_data)
+top_by_revenue = find_top_entry(item_summary, field="revenue")
+top_by_units = find_top_entry(item_summary, field="units_sold")
 
-# TODO: handle the optional dataset seed. This is the same three lines the Finance
-#       report has — read them there, then write them here yourself.
+# --- Step 3: Load -----------------------------------------------
 
+# Print the item table, one line per item, with totals formatted with commas and 2 decimals
 
-# TODO: print the header, exactly:   === MARKETING: Revenue by Item ===
-#       then a blank line.
+print(f"{'Item':<20} {'Units Sold':>12} {'Revenue':>12}")
+for entry in item_summary:
+    print(f"{entry['item']:<20} {entry['units_sold']:>12} ${entry['revenue']:>11,.2f}")
 
+print()  # blank line
 
-# 1. Extract — the same source Finance uses, called the same way.
-# TODO
+# Print the top sellers exactly with spacing aligned
 
-
-# 2. Transform — clean the rows, roll them up to one entry per item, then find the
-#    best entry twice: once by "revenue", once by "units_sold". They are usually
-#    different products, which is the whole reason Marketing asked.
-# TODO
-
-
-# 3. Load — the item table, a blank line, then two headline lines. Match this
-#    layout exactly, including the padding that lines the two values up:
-#
-#        Top seller by revenue: Gizmo Pro ($1,200.00)
-#        Top seller by units:   Widget C (15 units)
-# TODO
+print(f"Top seller by revenue: {top_by_revenue['item']} (${top_by_revenue['revenue']:,.2f})")
+print(f"Top seller by units:   {top_by_units['item']} ({top_by_units['units_sold']} units)")

@@ -19,6 +19,7 @@ Before running:  pip install -r requirements.txt
 
 import sys
 
+
 from sales_pipeline import (
     get_raw_sales_data, 
     clean_sales_data,
@@ -44,7 +45,21 @@ if len(sys.argv) > 1 and sys.argv[1].strip() != "":
 
 
 # --- The report ------------------------------------------------------------------
-#
+# Print the header exactly as requested
+print("=== FINANCE: Daily Sales Detail ===")
+print() 
+
+raw_data = get_raw_sales_data(seed)
+
+clean_data = clean_sales_data(raw_data)
+total_revenue = calculate_total_revenue(clean_data)
+
+print_sales_table(clean_data)
+print() 
+
+print(f"Total Pipeline Revenue: ${total_revenue:,.2f}")
+
+
 # Fill in each TODO below. This first report names the exact function to call and
 # the exact variable to store it in; the Marketing report will describe the steps
 # and leave the calls to you; the Operations report gives you neither.

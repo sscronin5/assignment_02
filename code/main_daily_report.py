@@ -22,6 +22,42 @@ Before running:  pip install -r requirements.txt
     python code/main_daily_report.py 42     # the generated data for seed 42
 """
 
+from sales_pipeline import summarize_by_day, find_top_entry, calculate_total_revenue
+
+import sys
+from sales_pipeline import get_raw_sales_data, clean_sales_data, summarize_by_day, find_top_entry, calculate_total_revenue
+
+# Handle the seed argument exactly like other reports:
+if len(sys.argv) > 1:
+    try:
+        seed = int(sys.argv[1])
+    except ValueError:
+        print("Seed must be an integer.")
+        sys.exit(1)
+else:
+    seed = None
+
+print("=== OPERATIONS: Revenue by Day ===\n")
+
+# Step 1: Extract
+raw_data = get_raw_sales_data(seed)
+
+# Step 2: Transform
+clean_data = clean_sales_data(raw_data)
+day_summary = summarize_by_day(clean_data)
+
+# Find top day by revenue, using existing function
+top_day = find_top_entry(day_summary, field="revenue")
+
+# Step 3: Load - print the summary
+print(f"{'Day':<10} {'Units Sold':>12} {'Revenue':>12}")
+for entry in day_summary:
+    print(f"{entry['day']:<10} {entry['units_sold']:>12} ${entry['revenue']:>11,.2f}")
+
+print()
+print(f"Top day by revenue: {top_day['day']} (${top_day['revenue']:,.2f})")
+
+
 # --- The report ------------------------------------------------------------------
 #
 # No scaffolding. You have written two of these now, and this one asks the same
