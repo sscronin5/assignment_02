@@ -4,3 +4,56 @@ See reflection.md for what makes a good reflection — be specific, use the
 terminology from this assignment (package, module, ETL, coercion, public API,
 relative import, accumulator, group by, unit vs. integration test), and make it
 actionable.
+
+'''
+This assignment was a lot more difficult than I was expecting. Starting with 
+the negatives: 
+The hardest thing that I experienced was trying to locate how to
+successfully follow from page to page without being able to do it all at once. I 
+kept having to ask the chat bot about specific commands that would help me run 
+the tests that I needed so I didn't get too far ahead with problems. In the 
+beginning, locating how to use find the testing terminal (even tho I knew how to)
+was my biggest set back. I had to continously use pytest and different test 
+functions in the terminal itself. The testing panel was showing an error for a 
+while. But once I was able to figure out my problem it went much smoother. 
+
+Secondly, the repition of having to repeat 'from sales_pipeline import (xxxx)' into 
+multiple programs through me for a little loop because I didn't know which ones needed 
+it until I was able to write all of the codes and run their tests as a whole. This showed
+me the benefits of having a centralized database in the beginning of each program (ie. 
+transform.py, extract.py, display.py and __init__py) as well as each of the report 
+sections. By making it as few functions as possible really helped me out here. 
+
+Finally, the last challenege that I delt with in this assignment was following the flow 
+of instructions provided on each page. Thankfully, much of this lab was trying to use 
+the clues and hints provided and testing which ones worked and which didn't. Updating 
+software, making sure everything was up to date, and that I wasn't repeating any parts. 
+I did this lab in the span of about 3 hours over 2 days which made me have to go back 
+and remember what parts of each module I had completed already. 
+  
+What went well (new understandings):
+The ETL separation took a little while to clean up. Splitting sales_pipeline into 
+modules by responsibility meant extract.py only focused on handing over raw rows of 
+untouched data, transform.py used all of the previous calculations without printing 
+anything, and display.py focused on printing and formating correctly. Because of that 
+understanding, the coercion of how the pages worked helped paying off my work and 
+comprehension of the assignment. 
+
+I learned how to use read the errors that came to me, like what sorting keys and
+group lists meant in the output. This allowed me to track back in a more efficient way. 
+The benfits of collapsing many rows into one row per value of a column, helping grouping 
+each of the relative imports in an easier way. Using a because a top-level script showed 
+me the benefits of including a parent package at the top of a page to help what part needed
+more attention to resolve.
+
+Still want to work on (continue learning):
+Building my own public API, this was one of the most helpful parts in the assignment. 
+When I felt like I was confused and needed to go back, I was able to track the __init__py
+module to give me more information about what was done, so through process of elmination 
+I was able to keep pressing forward. 
+
+Finally, I used both Claude Code and the class Chatbot to help me learn about what was 
+wrong when I got an error that I didn't understand. I want to continue working on pushing
+past by myself before turning to AI to help me solve something. This could be said about 
+anything but specifically with something as complicated as straight code, this would help
+me learn more about coding in VScode and Python specifically. 
